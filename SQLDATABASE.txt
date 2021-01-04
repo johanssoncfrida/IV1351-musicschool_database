@@ -1,0 +1,1158 @@
+
+
+DROP TABLE IF EXISTS "group_lesson";
+DROP SEQUENCE IF EXISTS group_lesson_id_group_lesson_seq;
+CREATE SEQUENCE group_lesson_id_group_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS group_lesson_id_music_lesson_seq;
+CREATE SEQUENCE group_lesson_id_music_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."group_lesson" (
+    "id_group" integer DEFAULT nextval('group_lesson_id_group_lesson_seq') NOT NULL,
+    "level" character varying(100),
+    "number_of_participants" smallint DEFAULT '0',
+    "type_instrument" character varying(100),
+    "id_music_lesson" integer DEFAULT nextval('group_lesson_id_music_lesson_seq') NOT NULL,
+    CONSTRAINT "group_lesson_pkey" PRIMARY KEY ("id_group")
+) WITH (oids = false);
+
+ALTER TABLE group_lesson ADD CONSTRAINT chk_group_instrument CHECK(type_instrument in('guitar','drums', 'base', 'trumpet', 'piano', 'violin', 'cello', 'saxophone'));
+ALTER TABLE group_lesson ADD CONSTRAINT chk_group_participants CHECK (number_of_participants BETWEEN 3 AND 8);
+ALTER TABLE group_lesson ADD CONSTRAINT chk_group_level CHECK(level in('beginner', 'intermediate','advanced'));
+
+INSERT INTO "group_lesson" ("id_group", "level", "number_of_participants", "type_instrument", "id_music_lesson") VALUES
+(1,	'beginner',	4,	'guitar',	1),
+(2,	'intermediate',	3,	'trumpet',	2),
+(3,	'beginner',	4,	'guitar',	3),
+(4,	'advanced',	3,	'piano',	4),
+(6,	'beginner',	4,	'guitar',	6),
+(7,	'beginner',	4,	'guitar',	7),
+(8,	'beginner',	4,	'guitar',	8),
+(9,	'beginner',	4,	'guitar',	9),
+(10,	'beginner',	4,	'guitar',	10),
+(16,	'advanced',	3,	'piano',	16),
+(17,	'advanced',	3,	'piano',	17),
+(18,	'advanced',	3,	'piano',	18),
+(19,	'advanced',	3,	'piano',	19),
+(20,	'beginner',	4,	'guitar',	20),
+(21,	'beginner',	4,	'guitar',	21),
+(22,	'beginner',	4,	'guitar',	22),
+(23,	'beginner',	4,	'guitar',	23),
+(24,	'beginner',	4,	'guitar',	24),
+(25,	'beginner',	4,	'guitar',	25),
+(26,	'beginner',	4,	'guitar',	26),
+(27,	'beginner',	4,	'guitar',	27),
+(28,	'beginner',	4,	'guitar',	28),
+(29,	'beginner',	4,	'guitar',	29),
+(30,	'beginner',	4,	'guitar',	30),
+(31,	'beginner',	4,	'guitar',	31),
+(32,	'beginner',	4,	'guitar',	32),
+(33,	'intermediate',	3,	'trumpet',	33),
+(34,	'intermediate',	3,	'trumpet',	34),
+(35,	'intermediate',	3,	'trumpet',	35),
+(36,	'intermediate',	3,	'trumpet',	36),
+(37,	'intermediate',	3,	'trumpet',	37),
+(38,	'intermediate',	3,	'trumpet',	38),
+(39,	'intermediate',	3,	'trumpet',	39),
+(40,	'intermediate',	3,	'trumpet',	40),
+(41,	'intermediate',	3,	'trumpet',	41),
+(42,	'intermediate',	3,	'trumpet',	42),
+(43,	'intermediate',	3,	'trumpet',	43),
+(44,	'intermediate',	3,	'trumpet',	44),
+(45,	'intermediate',	3,	'trumpet',	45),
+(46,	'advanced',	3,	'piano',	46),
+(47,	'advanced',	3,	'piano',	47),
+(48,	'advanced',	3,	'piano',	48),
+(49,	'advanced',	3,	'piano',	49),
+(50,	'advanced',	3,	'piano',	50),
+(5,	'intermediate',	3,	'trumpet',	5),
+(11,	'intermediate',	3,	'trumpet',	11),
+(12,	'intermediate',	3,	'trumpet',	12),
+(13,	'intermediate',	3,	'trumpet',	13),
+(14,	'intermediate',	3,	'trumpet',	14),
+(15,	'intermediate',	3,	'trumpet',	15);
+
+ALTER table group_lesson add price smallint default '0';
+UPDATE group_lesson set price = 100 where level='beginner';
+UPDATE group_lesson set price = 150 where level='intermediate';
+UPDATE group_lesson set price = 200 where level='advanced';
+
+DROP TABLE IF EXISTS "scheduled_hour_group";
+DROP SEQUENCE IF EXISTS scheduled_hour_group_id_group_lesson_seq;
+CREATE SEQUENCE scheduled_hour_group_id_group_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."scheduled_hour_group" (
+    "id_group" integer DEFAULT nextval('scheduled_hour_group_id_group_lesson_seq') NOT NULL,
+    "date" timestamp,
+    CONSTRAINT "scheduled_hour_group_pkey" PRIMARY KEY ("id_group"),
+    CONSTRAINT "scheduled_hour_group_id_group_lesson_fkey" FOREIGN KEY (id_group) REFERENCES group_lesson(id_group) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "scheduled_hour_group" ("id_group", "date") VALUES
+(4,	'2020-08-06 15:00:00'),
+(3,	'2020-08-10 13:00:00'),
+(1,	'2020-08-03 13:00:00'),
+(2,	'2020-08-05 14:00:00'),
+(5,	'2020-08-12 14:00:00'),
+(6,	'2020-08-17 13:00:00'),
+(7,	'2020-08-24 13:00:00'),
+(8,	'2020-08-31 13:00:00'),
+(9,	'2020-09-07 13:00:00'),
+(10,	'2020-09-14 13:00:00'),
+(11,	'2020-08-19 14:00:00'),
+(12,	'2020-08-26 14:00:00'),
+(13,	'2020-09-02 14:00:00'),
+(14,	'2020-09-09 14:00:00'),
+(15,	'2020-09-16 14:00:00'),
+(16,	'2020-08-13 15:00:00'),
+(17,	'2020-08-20 15:00:00'),
+(18,	'2020-08-27 15:00:00'),
+(19,	'2020-09-03 15:00:00'),
+(20,	'2020-09-21 13:00:00'),
+(21,	'2020-09-28 13:00:00'),
+(22,	'2020-10-05 13:00:00'),
+(23,	'2020-10-12 13:00:00'),
+(24,	'2020-10-19 13:00:00'),
+(25,	'2020-10-26 13:00:00'),
+(26,	'2020-11-02 13:00:00'),
+(27,	'2020-11-09 13:00:00'),
+(28,	'2020-11-16 13:00:00'),
+(29,	'2020-11-23 13:00:00'),
+(30,	'2020-11-30 13:00:00'),
+(31,	'2020-12-07 13:00:00'),
+(32,	'2020-12-14 13:00:00'),
+(33,	'2020-09-23 14:00:00'),
+(34,	'2020-09-30 14:00:00'),
+(35,	'2020-10-07 14:00:00'),
+(36,	'2020-10-14 14:00:00'),
+(37,	'2020-10-21 14:00:00'),
+(38,	'2020-10-28 14:00:00'),
+(39,	'2020-11-04 14:00:00'),
+(40,	'2020-11-11 14:00:00'),
+(41,	'2020-11-18 14:00:00'),
+(42,	'2020-11-25 14:00:00'),
+(46,	'2020-09-10 15:00:00'),
+(47,	'2020-09-17 15:00:00'),
+(48,	'2020-09-24 15:00:00'),
+(49,	'2020-10-01 15:00:00'),
+(50,	'2020-10-08 15:00:00'),
+(43,	'2020-12-30 14:00:00'),
+(44,	'2021-01-06 14:00:00'),
+(45,	'2021-01-13 14:00:00');
+
+
+DROP TABLE IF EXISTS "individual_lesson";
+DROP SEQUENCE IF EXISTS individual_lesson_id_individual_lesson_seq;
+CREATE SEQUENCE individual_lesson_id_individual_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS individual_lesson_id_music_lesson_seq;
+CREATE SEQUENCE individual_lesson_id_music_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."individual_lesson" (
+    "id_individual_lesson" integer DEFAULT nextval('individual_lesson_id_individual_lesson_seq') NOT NULL,
+    "level" character varying(100),
+    "type_instrument" character varying(100),
+    "id_music_lesson" integer DEFAULT nextval('individual_lesson_id_music_lesson_seq') NOT NULL,
+    CONSTRAINT "individual_lesson_pkey" PRIMARY KEY ("id_individual_lesson")
+) WITH (oids = false);
+
+INSERT INTO "individual_lesson" ("id_individual_lesson", "level", "type_instrument", "id_music_lesson") VALUES
+(55,	'beginner',	'guitar',	55),
+(56,	'beginner',	'guitar',	56),
+(57,	'beginner',	'trumpet',	57),
+(58,	'advanced',	'base',	58),
+(59,	'advanced',	'trumpet',	59),
+(60,	'beginner',	'piano',	60),
+(61,	'beginner',	'piano',	61),
+(62,	'intermediate',	'drums',	62),
+(63,	'intermediate',	'drums',	63),
+(64,	'intermediate',	'saxophone',	64),
+(65,	'advanced',	'guitar',	65),
+(66,	'advanced',	'base',	66),
+(67,	'beginner',	'saxophone',	67),
+(68,	'beginner',	'piano',	68);
+
+ALTER table individual_lesson add price smallint default '0';
+UPDATE individual_lesson set price = 150 where level='beginner';
+UPDATE individual_lesson set price = 200 where level='intermediate';
+UPDATE individual_lesson set price = 300 where level='advanced';
+
+
+ALTER TABLE individual_lesson ADD CONSTRAINT chk_individual_instrument CHECK(type_instrument in('guitar','drums', 'base', 'trumpet', 'piano', 'violin', 'cello', 'saxophone'));
+ALTER TABLE individual_lesson ADD CONSTRAINT chk_individual_level CHECK(level in('beginner', 'intermediate','advanced'));
+
+DROP TABLE IF EXISTS "ensemble_lesson";
+DROP SEQUENCE IF EXISTS ensemble_lesson_id_ensemble_seq;
+CREATE SEQUENCE ensemble_lesson_id_ensemble_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS ensemble_lesson_id_music_lesson_seq;
+CREATE SEQUENCE ensemble_lesson_id_music_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."ensemble_lesson" (
+    "id_ensemble" integer DEFAULT nextval('ensemble_lesson_id_ensemble_seq') NOT NULL,
+    "genre" character varying(100),
+    "level" character varying(100),
+    "number_of_participants" smallint DEFAULT '0',
+    "id_music_lesson" integer DEFAULT nextval('ensemble_lesson_id_music_lesson_seq') NOT NULL,
+    CONSTRAINT "ensemble_lesson_pkey" PRIMARY KEY ("id_ensemble")
+) WITH (oids = false);
+
+INSERT INTO "ensemble_lesson" ("id_ensemble", "genre", "level", "number_of_participants", "id_music_lesson") VALUES
+(51,	'funk',	'intermediate',	3,	51),
+(52,	'rock',	'intermediate',	3,	52),
+(53,	'jazz',	'intermediate',	3,	53),
+(54,	'blues',	'intermediate',	3,	54),
+(69,	'reggae',	'intermediate',	8,	69),
+(70,	'classic',	'intermediate',	3,	70),
+(71,	'country',	'intermediate',	3,	71),
+(72,	'blues',	'intermediate',	3,	72);
+
+ALTER table ensemble_lesson add price smallint default '0';
+UPDATE ensemble_lesson set price = 100 where level='beginner';
+UPDATE ensemble_lesson set price = 150 where level='intermediate';
+UPDATE ensemble_lessonn set price = 200 where level='advanced';
+
+ALTER TABLE ensemble_lesson ADD CONSTRAINT chk_ensemble_genre CHECK(genre in('rock','classic','jazz','blues','reggae','country','disco','funk'));
+ALTER TABLE ensemble_lesson ADD CONSTRAINT chk_ensemble_participants CHECK (number_of_participants BETWEEN 3 AND 8);
+ALTER TABLE ensemble_lesson ADD CONSTRAINT chk_ensemble_level CHECK(level in('beginner', 'intermediate','advanced'));
+
+DROP TABLE IF EXISTS "scheduled_hour_ensemble";
+DROP SEQUENCE IF EXISTS scheduled_hour_ensemble_id_ensemble_seq;
+CREATE SEQUENCE scheduled_hour_ensemble_id_ensemble_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."scheduled_hour_ensemble" (
+    "id_ensemble" integer DEFAULT nextval('scheduled_hour_ensemble_id_ensemble_seq') NOT NULL,
+    "date" timestamp,
+    CONSTRAINT "scheduled_hour_ensemble_pkey" PRIMARY KEY ("id_ensemble"),
+    CONSTRAINT "scheduled_hour_ensemble_id_ensemble_fkey" FOREIGN KEY (id_ensemble) REFERENCES ensemble_lesson(id_ensemble) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "scheduled_hour_ensemble" ("id_ensemble", "date") VALUES
+(51,	'2020-08-06 16:00:00'),
+(52,	'2020-10-09 16:00:00'),
+(53,	'2020-10-23 16:00:00'),
+(54,	'2020-11-20 16:00:00'),
+(69,	'2020-12-25 16:00:00'),
+(70,	'2021-01-05 16:00:00'),
+(71,	'2021-01-07 16:00:00'),
+(72,	'2021-01-14 16:00:00');
+
+
+
+DROP TABLE IF EXISTS "person";
+DROP SEQUENCE IF EXISTS person_id_seq;
+CREATE SEQUENCE person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."person" (
+    "id" integer DEFAULT nextval('person_id_seq') NOT NULL,
+    "first_name" character varying(100) NOT NULL,
+    "last_name" character varying(100) NOT NULL,
+    "personal_number" character varying(100) NOT NULL,
+    CONSTRAINT "person_personal_number_key" UNIQUE ("personal_number"),
+    CONSTRAINT "person_phone_no_key" UNIQUE ("phone_no"),
+    CONSTRAINT "person_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+INSERT INTO "person" ("id", "first_name", "last_name", "personal_number") VALUES
+(1,	'frida',	'johansson',	'19920423'),
+(2,	'josefine',	'johansson',	'19861205'),
+(3,	'olle',	'olsson',	'19950605'),
+(4,	'kalle',	'karlsson',	'19960813'),
+(5,	'saga',	'andersson',	'19890909'),
+(6,	'lena',	'svärd',	'19851009'),
+(7,	'anton',	'vik',	'19980201'),
+(8,	'nils',	'nilsson',	'19930502'),
+(9,	'anna',	'larsson',	'19911108'),
+(10,	'lisa',	'kvist',	'19901208'),
+(11,	'william',	'ström',	'19970312'),
+(12,	'helena',	'holm',	'19980412'),
+(13,	'christoffer',	'kristersson',	'19840714'),
+(14,	'lovisa',	'krans',	'19850314'),
+(15,	'lars',	'westlund',	'19801114'),
+(16,	'karin',	'jönsson',	'19801214'),
+(17,	'wille',	'skiöld',	'19820914'),
+(18,	'stina',	'stins',	'19810814'),
+(19,	'tage',	'kringla',	'19801003'),
+(20,	'oliver',	'sonner',	'19841208');
+
+
+DROP TABLE IF EXISTS "student";
+DROP SEQUENCE IF EXISTS student_person_id_seq;
+CREATE SEQUENCE student_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."student" (
+    "student_id" character varying(100) NOT NULL,
+    "level" character varying(100),
+    "person_id" integer DEFAULT nextval('student_person_id_seq') NOT NULL,
+    CONSTRAINT "add" PRIMARY KEY ("person_id"),
+    CONSTRAINT "student_student_id_key" UNIQUE ("student_id"),
+    CONSTRAINT "person_id" FOREIGN KEY (person_id) REFERENCES person(id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "student" ("student_id", "level", "person_id") VALUES
+('stu1',	'beginner',	1),
+('stu2',	'beginner',	2),
+('stu3',	'beginner',	3),
+('stu4',	'advanced',	4),
+('stu5',	'advanced',	5),
+('stu6',	'beginner',	6),
+('stu7',	'beginner',	7),
+('stu8',	'intermediate',	8),
+('stu9',	'intermediate',	9),
+('stu10',	'intermediate',	10),
+('stu11',	'advanced',	11),
+('stu12',	'advanced',	12),
+('stu13',	'beginner',	13),
+('stu14',	'beginner',	14);
+
+DROP TABLE IF EXISTS "sibling";
+DROP SEQUENCE IF EXISTS sibling_person_id_seq;
+CREATE SEQUENCE sibling_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."sibling" (
+    "person_id" integer DEFAULT nextval('sibling_person_id_seq') NOT NULL,
+    "personal_id_sibling" character varying(100),
+    CONSTRAINT "sibling_personal_id_sibling_key" UNIQUE ("personal_id_sibling"),
+    CONSTRAINT "sibling_pkey" PRIMARY KEY ("person_id"),
+    CONSTRAINT "sibling_person_id_fkey" FOREIGN KEY (person_id) REFERENCES student(person_id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "sibling" ("person_id", "personal_id_sibling") VALUES
+(1,	'19861205'),
+(2,	'19920423');
+
+DROP TABLE IF EXISTS "teacher";
+DROP SEQUENCE IF EXISTS teacher_person_id_seq;
+CREATE SEQUENCE teacher_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."teacher" (
+    "teacher_id" smallint NOT NULL,
+    "proficiency" character varying(100),
+    "person_id" integer DEFAULT nextval('teacher_person_id_seq') NOT NULL,
+    CONSTRAINT "teacher_teacher_id_key" UNIQUE ("teacher_id"),
+    CONSTRAINT "person_id" FOREIGN KEY (person_id) REFERENCES person(id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "teacher" ("teacher_id", "proficiency", "person_id") VALUES
+(12345,	'guitar',	15),
+(13425,	'trumpet',	16),
+(12435,	'piano',	17),
+(12234,	'base',	17),
+(12244,	'saxophone',	18),
+(12444,	'ensemble',	19),
+(13334,	'drums',	20);
+
+
+DROP TABLE IF EXISTS "music_lesson";
+DROP SEQUENCE IF EXISTS music_lesson_id_music_lesson_seq;
+CREATE SEQUENCE music_lesson_id_music_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS music_lesson_person_id_seq;
+CREATE SEQUENCE music_lesson_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."music_lesson" (
+    "id_music_lesson" integer DEFAULT nextval('music_lesson_id_music_lesson_seq') NOT NULL,
+    "level" character varying(100),
+    "person_id" integer DEFAULT nextval('music_lesson_person_id_seq') NOT NULL,
+    "teacher_id" smallint NOT NULL,
+    CONSTRAINT "music_lesson_person_id_fkey" FOREIGN KEY (person_id) REFERENCES student(person_id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "music_lesson" ("id_music_lesson", "level", "person_id", "teacher_id") VALUES
+(1,	'beginner',	1,	12345),
+(1,	'beginner',	2,	12345),
+(1,	'beginner',	3,	12345),
+(1,	'beginner',	6,	12345),
+(2,	'intermediate',	8,	13425),
+(2,	'intermediate',	9,	13425),
+(2,	'intermediate',	10,	13425),
+(3,	'beginner',	1,	12345),
+(3,	'beginner',	2,	12345),
+(3,	'beginner',	3,	12345),
+(3,	'beginner',	6,	12345),
+(4,	'advanced',	4,	12435),
+(4,	'advanced',	5,	12435),
+(4,	'advanced',	11,	12435),
+(5,	'intermediate',	8,	13425),
+(5,	'intermediate',	9,	13425),
+(5,	'intermediate',	10,	13425),
+(6,	'beginner',	6,	12345),
+(6,	'beginner',	7,	12345),
+(6,	'beginner',	13,	12345),
+(6,	'beginner',	14,	12345),
+(7,	'beginner',	1,	12345),
+(7,	'beginner',	2,	12345),
+(7,	'beginner',	3,	12345),
+(7,	'beginner',	6,	12345),
+(8,	'beginner',	1,	12345),
+(8,	'beginner',	7,	12345),
+(8,	'beginner',	13,	12345),
+(8,	'beginner',	14,	12345),
+(9,	'beginner',	2,	12345),
+(9,	'beginner',	3,	12345),
+(9,	'beginner',	6,	12345),
+(9,	'beginner',	14,	12345),
+(10,	'beginner',	1,	12345),
+(10,	'beginner',	2,	12345),
+(10,	'beginner',	3,	12345),
+(10,	'beginner',	13,	12345),
+(11,	'intermediate',	8,	13425),
+(11,	'intermediate',	9,	13425),
+(11,	'intermediate',	10,	13425),
+(12,	'intermediate',	8,	13425),
+(12,	'intermediate',	9,	13425),
+(12,	'intermediate',	10,	13425),
+(13,	'intermediate',	8,	13425),
+(13,	'intermediate',	9,	13425),
+(13,	'intermediate',	10,	13425),
+(14,	'intermediate',	8,	13425),
+(14,	'intermediate',	9,	13425),
+(14,	'intermediate',	10,	13425),
+(15,	'intermediate',	8,	13425),
+(15,	'intermediate',	9,	13425),
+(15,	'intermediate',	10,	13425),
+(16,	'advanced',	4,	12435),
+(16,	'advanced',	5,	12435),
+(16,	'advanced',	11,	12435),
+(17,	'advanced',	12,	12435),
+(17,	'advanced',	11,	12435),
+(17,	'advanced',	4,	12435),
+(18,	'advanced',	4,	12435),
+(18,	'advanced',	5,	12435),
+(18,	'advanced',	12,	12435),
+(19,	'advanced',	5,	12435),
+(19,	'advanced',	11,	12435),
+(19,	'advanced',	12,	12435),
+(20,	'beginner',	1,	12345),
+(21,	'beginner',	2,	12345),
+(21,	'beginner',	3,	12345),
+(21,	'beginner',	13,	12345),
+(21,	'beginner',	1,	12345),
+(20,	'beginner',	2,	12345),
+(20,	'beginner',	3,	12345),
+(20,	'beginner',	14,	12345),
+(22,	'beginner',	2,	12345),
+(22,	'beginner',	3,	12345),
+(22,	'beginner',	13,	12345),
+(22,	'beginner',	14,	12345),
+(23,	'beginner',	14,	12345),
+(23,	'beginner',	13,	12345),
+(23,	'beginner',	3,	12345),
+(23,	'beginner',	2,	12345),
+(24,	'beginner',	1,	12345),
+(24,	'beginner',	2,	12345),
+(24,	'beginner',	3,	12345),
+(24,	'beginner',	13,	12345),
+(25,	'beginner',	6,	12345),
+(25,	'beginner',	7,	12345),
+(25,	'beginner',	1,	12345),
+(25,	'beginner',	2,	12345),
+(26,	'beginner',	3,	12345),
+(26,	'beginner',	6,	12345),
+(26,	'beginner',	7,	12345),
+(26,	'beginner',	13,	12345),
+(27,	'beginner',	14,	12345),
+(27,	'beginner',	7,	12345),
+(27,	'beginner',	6,	12345),
+(27,	'beginner',	3,	12345),
+(28,	'beginner',	1,	12345),
+(28,	'beginner',	2,	12345),
+(28,	'beginner',	13,	12345),
+(28,	'beginner',	14,	12345),
+(29,	'beginner',	6,	12345),
+(29,	'beginner',	7,	12345),
+(29,	'beginner',	3,	12345),
+(29,	'beginner',	13,	12345),
+(30,	'beginner',	1,	12345),
+(30,	'beginner',	2,	12345),
+(30,	'beginner',	6,	12345),
+(30,	'beginner',	7,	12345),
+(31,	'beginner',	13,	12345),
+(31,	'beginner',	14,	12345),
+(31,	'beginner',	3,	12345),
+(31,	'beginner',	6,	12345),
+(32,	'beginner',	7,	12345),
+(32,	'beginner',	13,	12345),
+(32,	'beginner',	14,	12345),
+(32,	'beginner',	3,	12345),
+(33,	'intermediate',	8,	13425),
+(33,	'intermediate',	9,	13425),
+(33,	'intermediate',	10,	13425),
+(34,	'intermediate',	8,	13425),
+(34,	'intermediate',	9,	13425),
+(34,	'intermediate',	10,	13425),
+(35,	'intermediate',	8,	13425),
+(35,	'intermediate',	9,	13425),
+(35,	'intermediate',	10,	13425),
+(36,	'intermediate',	8,	13425),
+(36,	'intermediate',	9,	13425),
+(36,	'intermediate',	10,	13425),
+(37,	'intermediate',	8,	13425),
+(37,	'intermediate',	9,	13425),
+(37,	'intermediate',	10,	13425),
+(38,	'intermediate',	8,	13425),
+(38,	'intermediate',	9,	13425),
+(38,	'intermediate',	10,	13425),
+(39,	'intermediate',	8,	13425),
+(39,	'intermediate',	9,	13425),
+(39,	'intermediate',	10,	13425),
+(40,	'intermediate',	8,	13425),
+(40,	'intermediate',	9,	13425),
+(40,	'intermediate',	10,	13425),
+(41,	'intermediate',	8,	13425),
+(41,	'intermediate',	9,	13425),
+(41,	'intermediate',	10,	13425),
+(42,	'intermediate',	8,	13425),
+(42,	'intermediate',	9,	13425),
+(42,	'intermediate',	10,	13425),
+(43,	'intermediate',	8,	13425),
+(43,	'intermediate',	9,	13425),
+(43,	'intermediate',	10,	13425),
+(44,	'intermediate',	8,	13425),
+(44,	'intermediate',	9,	13425),
+(44,	'intermediate',	10,	13425),
+(45,	'intermediate',	8,	13425),
+(45,	'intermediate',	9,	13425),
+(45,	'intermediate',	10,	13425),
+(46,	'advanced',	4,	12435),
+(46,	'advanced',	5,	12435),
+(46,	'advanced',	11,	12435),
+(47,	'advanced',	4,	12435),
+(47,	'advanced',	5,	12435),
+(47,	'advanced',	11,	12435),
+(48,	'advanced',	4,	12435),
+(48,	'advanced',	5,	12435),
+(48,	'advanced',	11,	12435),
+(49,	'advanced',	4,	12435),
+(49,	'advanced',	5,	12435),
+(49,	'advanced',	11,	12435),
+(50,	'advanced',	4,	12435),
+(50,	'advanced',	5,	12435),
+(50,	'advanced',	11,	12435),
+(51,	'advanced',	8,	12444),
+(51,	'advanced',	9,	12444),
+(51,	'advanced',	10,	12444),
+(52,	'advanced',	8,	12444),
+(52,	'advanced',	9,	12444),
+(52,	'advanced',	10,	12444),
+(53,	'advanced',	8,	12444),
+(53,	'advanced',	9,	12444),
+(53,	'advanced',	10,	12444),
+(54,	'advanced',	8,	12444),
+(54,	'advanced',	9,	12444),
+(54,	'advanced',	10,	12444),
+(55,	'beginner',	1,	12345),
+(56,	'beginner',	2,	12345),
+(57,	'beginner',	3,	13425),
+(58,	'advanced',	4,	12234),
+(59,	'advanced',	5,	13425),
+(60,	'beginner',	6,	12435),
+(61,	'beginner',	7,	12435),
+(62,	'intermediate',	8,	13334),
+(63,	'intermediate',	9,	13334),
+(64,	'intermediate',	10,	12244),
+(65,	'advanced',	11,	12345),
+(66,	'advanced',	12,	12234),
+(67,	'beginner',	13,	12244),
+(68,	'beginner',	14,	12435),
+(69,	'intermediate',	1,	12444),
+(69,	'intermediate',	2,	12444),
+(69,	'intermediate',	3,	12444),
+(69,	'intermediate',	4,	12444),
+(69,	'intermediate',	5,	12444),
+(69,	'intermediate',	8,	12444),
+(69,	'intermediate',	9,	12444),
+(69,	'intermediate',	10,	12444),
+(70,	'intermediate',	8,	12444),
+(70,	'intermediate',	9,	12444),
+(70,	'intermediate',	10,	12444),
+(71,	'intermediate',	8,	12444),
+(71,	'intermediate',	9,	12444),
+(71,	'intermediate',	10,	12444),
+(72,	'intermediate',	8,	12444),
+(72,	'intermediate',	9,	12444),
+(72,	'intermediate',	10,	12444);
+
+
+DROP TABLE IF EXISTS "instrument_rental";
+DROP SEQUENCE IF EXISTS instument_rental_id_instrument_rental_seq;
+CREATE SEQUENCE instument_rental_id_instrument_rental_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."instrument_rental" (
+    "id_instrument_rental" integer DEFAULT nextval('instument_rental_id_instrument_rental_seq') NOT NULL,
+    "type_of_instrument" character varying(100),
+    "brands" character varying(100),
+    "rented" boolean,
+    "price" smallint,
+    "person_id" integer,
+    CONSTRAINT "instument_rental_pkey" PRIMARY KEY ("id_instrument_rental"),
+    CONSTRAINT "instrument_rental_person_id_fkey" FOREIGN KEY (person_id) REFERENCES student(person_id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "instrument_rental" ("id_instrument_rental", "type_of_instrument", "brands", "rented", "price", "person_id") VALUES
+(15,	'guitar',	'fender',	'0',	100,	NULL),
+(16,	'guitar',	'fender',	'0',	100,	NULL),
+(17,	'guitar',	'fender',	'0',	100,	NULL),
+(18,	'guitar',	'fender',	'0',	100,	NULL),
+(19,	'guitar',	'fender',	'0',	100,	NULL),
+(20,	'base',	'fender',	'0',	120,	NULL),
+(21,	'base',	'fender',	'0',	120,	NULL),
+(22,	'saxophone',	'yamaha',	'0',	170,	NULL),
+(1,	'guitar',	'fender',	'1',	100,	1),
+(2,	'guitar',	'fender',	'1',	100,	2),
+(3,	'trumpet',	'yamaha',	'1',	110,	3),
+(4,	'base',	'fender',	'1',	120,	4),
+(5,	'trumpet',	'yamaha',	'1',	110,	5),
+(6,	'piano',	'yamaha',	'1',	180,	6),
+(7,	'piano',	'yamaha',	'1',	180,	7),
+(8,	'drums',	'yamaha',	'1',	200,	8),
+(9,	'drums',	'yamaha',	'1',	200,	9),
+(10,	'saxophone',	'yamaha',	'1',	170,	10),
+(11,	'guitar',	'fender',	'1',	100,	11),
+(12,	'base',	'fender',	'1',	120,	12),
+(13,	'saxophone',	'yamaha',	'1',	170,	13),
+(14,	'piano',	'yamaha',	'1',	180,	14),
+(23,	'trumpet',	'yamaha',	'1',	110,	8),
+(24,	'trumpet',	'yamaha',	'1',	110,	9),
+(25,	'trumpet',	'yamaha',	'1',	110,	10);
+
+DROP TABLE IF EXISTS "instrument_rental_period";
+DROP SEQUENCE IF EXISTS instrument_rental_period_id_instrument_rental_seq;
+CREATE SEQUENCE instrument_rental_period_id_instrument_rental_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."instrument_rental_period" (
+    "id_instrument_rental" integer DEFAULT nextval('instrument_rental_period_id_instrument_rental_seq') NOT NULL,
+    "rent_period_start" date,
+    CONSTRAINT "instrument_rental_period_id_instrument_rental_fkey" FOREIGN KEY (id_instrument_rental) REFERENCES instrument_rental(id_instrument_rental) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "instrument_rental_period" ("id_instrument_rental", "rent_period_start") VALUES
+(1,	'2020-08-11'),
+(2,	'2020-08-25'),
+(3,	'2020-08-26'),
+(4,	'2020-09-01'),
+(5,	'2020-09-08'),
+(6,	'2020-09-22'),
+(7,	'2020-09-23'),
+(8,	'2020-09-28'),
+(9,	'2020-09-29'),
+(10,	'2020-09-30'),
+(11,	'2020-10-13'),
+(12,	'2020-10-14'),
+(13,	'2020-11-03'),
+(14,	'2020-11-03');
+
+DROP TABLE IF EXISTS "discount";
+DROP SEQUENCE IF EXISTS discount_person_id_seq;
+CREATE SEQUENCE discount_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."discount" (
+    "percentage" numeric(3,2),
+    "person_id" integer DEFAULT nextval('discount_person_id_seq') NOT NULL,
+    CONSTRAINT "discount_person_id_fkey" FOREIGN KEY (person_id) REFERENCES sibling(person_id) NOT DEFERRABLE
+) WITH (oids = false);
+
+COMMENT ON COLUMN "public"."discount"."percentage" IS '0.10';
+
+INSERT INTO "discount" ("percentage", "person_id") VALUES
+(0.10,	1),
+(0.10,	2);
+
+
+DROP TABLE IF EXISTS "contact_details";
+DROP SEQUENCE IF EXISTS contact_details_person_id_seq;
+CREATE SEQUENCE contact_details_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS contact_details_contact_details_id_seq;
+CREATE SEQUENCE contact_details_contact_details_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."contact_details" (
+    "person_id" integer DEFAULT nextval('contact_details_person_id_seq') NOT NULL,
+    "address" character varying(100),
+    "email" character varying(100),
+    "phone_no" character varying(100),
+    "contact_details_id" integer DEFAULT nextval('contact_details_contact_details_id_seq') NOT NULL,
+    CONSTRAINT "contact_details_pkey" PRIMARY KEY ("contact_details_id"),
+    CONSTRAINT "contact_details_person_id_fkey" FOREIGN KEY (person_id) REFERENCES person(id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "contact_details" ("person_id", "address", "email", "phone_no", "contact_details_id") VALUES
+(3,	'ollevägen 12, 112 55 sthlm',	'olle@olle.se',	'202-22222',	1),
+(4,	'kallevägen 5, 112 55 sthlm',	'kalle@kalle.se',	'303-33333',	2),
+(5,	'sagagatan 2, 112 55 sthlm',	'saga@saga.se',	'404-44444',	3),
+(6,	'lenavägen 1, 112 55 sthlm',	'lena@lena.se',	'505-55555',	4),
+(7,	'vikgatan 4, 112 55 sthlm',	'anton@vik.se',	'606-66666',	5),
+(8,	'nilssonsvägen 9, 112 55 sthlm',	'herr@nilsson.se',	'707-77777',	6),
+(9,	'annagatan 4, 112 55 sthlm',	'anna@anna.se',	'808-88888',	7),
+(10,	'kvistvägen 7, 112 55 sthlm',	'lisa@kvist.se',	'909-99999',	8),
+(12,	'holmen 10, 112 55 sthlm',	'helena@holm.se',	'121-12121',	9),
+(13,	'krisgatan 13, 112 55 sthlm',	'kristersson@kris.se',	'131-13131',	10),
+(14,	'kransvägen 15, 112 55 sthlm',	'kransen@krans.se',	'141-14141',	11),
+(15,	'larsgatan 7, 112 55 sthlm',	'lars@westlund.se',	'151-15151',	12),
+(18,	'stinsgatan 2, 112 55 sthlm',	'stina@stins.se',	'181-18181',	13),
+(19,	'kringlan 5, 112 55 sthlm',	'tage@kringla.se',	'191-19191',	14),
+(20,	'sonnervägen 9, 112 55 sthlm',	'oliver@sonner.se',	'202-20202',	15),
+(1,	'johansvägen 13, 112 55 sthlm',	'frida@frida.se',	'010-11111',	16),
+(2,	'jossanvägen 13, 112 55 sthlm',	'jossan@jossan.se',	'010-11111',	17),
+(11,	'strömsgatan 8, 112 55 sthlm',	'strom@strom.se',	'101-10101',	18),
+(16,	'jönsgatan 18, 112 55 sthlm',	'karin@jonsson.se',	'161-16161',	19),
+(17,	'skiöldsvägen 16, 112 55 sthlm',	'wille@skiold.se',	'171-17171',	20);
+
+DROP TABLE IF EXISTS "contact_details_parents";
+DROP SEQUENCE IF EXISTS contact_details_parents_person_id_seq;
+CREATE SEQUENCE contact_details_parents_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS contact_details_parents_contact_parents_id_seq;
+CREATE SEQUENCE contact_details_parents_contact_parents_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."contact_details_parents" (
+    "person_id" integer DEFAULT nextval('contact_details_parents_person_id_seq') NOT NULL,
+    "phone_number" character varying(100),
+    "contact_parents_id" integer DEFAULT nextval('contact_details_parents_contact_parents_id_seq') NOT NULL,
+    "name_parent" character varying(100),
+    CONSTRAINT "contact_details_parents_pkey" PRIMARY KEY ("contact_parents_id"),
+    CONSTRAINT "contact_details_parents_person_id_fkey" FOREIGN KEY (person_id) REFERENCES person(id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "contact_details_parents" ("person_id", "phone_number", "contact_parents_id", "name_parent") VALUES
+(1,	'123-11221',	1,	'peder johansson'),
+(2,	'123-11221',	2,	'peder johansson'),
+(3,	'321-23123',	3,	'lars olsson'),
+(4,	'213-23452',	4,	'emma karlsson'),
+(5,	'123-22213',	5,	'peo andersson'),
+(6,	'123-11332',	6,	'per svärd'),
+(7,	'222-12332',	7,	'lisa vik'),
+(8,	'111-32132',	8,	'hans nilsson'),
+(9,	'232-12131',	9,	'peter larsson'),
+(10,	'222-13231',	10,	'astrid kvist'),
+(11,	'333-12132',	11,	'axel ström'),
+(12,	'111-31313',	12,	'hedvig holm'),
+(13,	'222-22331',	13,	'åsa kristersson'),
+(14,	'111-22131',	14,	'anna krans');
+
+
+DROP TABLE IF EXISTS "appointment";
+DROP SEQUENCE IF EXISTS appointment_id_individual_lesson_seq;
+CREATE SEQUENCE appointment_id_individual_lesson_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."appointment" (
+    "id_individual_lesson" integer DEFAULT nextval('appointment_id_individual_lesson_seq') NOT NULL,
+    "date" timestamp NOT NULL,
+    "level" character varying(100),
+    CONSTRAINT "appointment_pkey" PRIMARY KEY ("id_individual_lesson"),
+    CONSTRAINT "appointment_id_individual_lesson_fkey" FOREIGN KEY (id_individual_lesson) REFERENCES individual_lesson(id_individual_lesson) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO "appointment" ("id_individual_lesson", "date", "level") VALUES
+(55,	'2020-08-11 11:00:00',	'beginner'),
+(56,	'2020-08-25 11:00:00',	'beginner'),
+(57,	'2020-08-26 11:00:00',	'beginner'),
+(58,	'2020-09-01 11:00:00',	'advanced'),
+(59,	'2020-09-08 11:00:00',	'advanced'),
+(60,	'2020-09-22 11:00:00',	'beginner'),
+(61,	'2020-09-23 11:00:00',	'beginner'),
+(62,	'2020-09-28 11:00:00',	'intermediate'),
+(63,	'2020-09-29 11:00:00',	'intermediate'),
+(64,	'2020-09-30 11:00:00',	'intermediate'),
+(65,	'2020-10-13 11:00:00',	'advanced'),
+(66,	'2020-10-14 11:00:00',	'advanced'),
+(67,	'2020-11-03 11:00:00',	'beginner'),
+(68,	'2020-11-03 11:00:00',	'beginner');
+
+
+DROP TABLE IF EXISTS "application_form";
+DROP SEQUENCE IF EXISTS application_form_person_id_seq;
+CREATE SEQUENCE application_form_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS application_form_application_id_seq;
+CREATE SEQUENCE application_form_application_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS application_form_contact_parents_id_seq;
+CREATE SEQUENCE application_form_contact_parents_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS application_form_contact_details_id_seq;
+CREATE SEQUENCE application_form_contact_details_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."application_form" (
+    "level" character varying(100) NOT NULL,
+    "type_of_class" character varying(100) NOT NULL,
+    "person_id" integer DEFAULT nextval('application_form_person_id_seq') NOT NULL,
+    "id_application" integer DEFAULT nextval('application_form_application_id_seq') NOT NULL,
+    "age" smallint NOT NULL,
+    "contact_parents_id" integer DEFAULT nextval('application_form_contact_parents_id_seq') NOT NULL,
+    "audition" boolean NOT NULL,
+    "contact_details_id" integer DEFAULT nextval('application_form_contact_details_id_seq') NOT NULL,
+    CONSTRAINT "application_form_pkey" PRIMARY KEY ("id_application"),
+    CONSTRAINT "application_form_contact_details_id_fkey" FOREIGN KEY (contact_details_id) REFERENCES contact_details(contact_details_id) NOT DEFERRABLE,
+    CONSTRAINT "application_form_contact_parents_id_fkey" FOREIGN KEY (contact_parents_id) REFERENCES contact_details_parents(contact_parents_id) NOT DEFERRABLE,
+    CONSTRAINT "application_form_person_id_fkey" FOREIGN KEY (person_id) REFERENCES person(id) NOT DEFERRABLE
+) WITH (oids = false);
+
+ALTER TABLE application_form ADD CONSTRAINT chk_application_level CHECK(level in('beginner', 'intermediate','advanced'));
+ALTER TABLE application_form ADD CONSTRAINT chk_application_age CHECK(age>=18);
+
+INSERT INTO "application_form" ("level", "type_of_class", "person_id", "id_application", "age", "contact_parents_id", "audition", "contact_details_id") VALUES
+('beginner',	'guitar',	1,	1,	28,	1,	'0',	1),
+('beginner',	'guitar',	2,	2,	34,	2,	'0',	2),
+('beginner',	'guitar',	3,	3,	25,	3,	'0',	3),
+('beginner',	'trumpet',	3,	4,	25,	3,	'0',	3),
+('advanced',	'piano',	4,	5,	24,	4,	'1',	4),
+('advanced',	'base',	4,	6,	24,	4,	'1',	4),
+('advanced',	'piano',	5,	7,	31,	5,	'1',	5),
+('advanced',	'trumpet',	5,	8,	31,	5,	'1',	5),
+('beginner',	'guitar',	6,	9,	35,	6,	'0',	6),
+('beginner',	'piano',	6,	10,	35,	6,	'0',	6),
+('beginner',	'guitar',	7,	11,	22,	7,	'0',	7),
+('beginner',	'piano',	7,	12,	22,	7,	'0',	7),
+('intermediate',	'trumpet',	8,	13,	27,	8,	'0',	8),
+('intermediate',	'drums',	8,	14,	27,	8,	'0',	8),
+('advanced',	'ensemble',	8,	15,	27,	8,	'1',	8),
+('intermediate',	'trumpet',	9,	16,	29,	9,	'0',	9),
+('advanced',	'ensemble',	9,	17,	29,	9,	'1',	9),
+('intermediate',	'drums',	9,	18,	29,	9,	'0',	9),
+('intermediate',	'saxophone',	10,	19,	30,	10,	'0',	10),
+('intermediate',	'trumpet',	10,	20,	30,	10,	'0',	10),
+('advanced',	'ensemble',	10,	21,	30,	10,	'1',	10),
+('advanced',	'piano',	11,	23,	23,	11,	'1',	11),
+('advanced',	'guitar',	11,	22,	23,	11,	'1',	11),
+('advanced',	'base',	12,	24,	22,	12,	'1',	12),
+('advanced',	'piano',	12,	25,	22,	12,	'1',	12),
+('beginner',	'guitar',	13,	26,	36,	13,	'0',	13),
+('beginner',	'saxophone',	13,	27,	36,	13,	'0',	13),
+('beginner',	'piano',	14,	28,	35,	14,	'0',	14),
+('beginner',	'guitar',	14,	29,	35,	14,	'0',	14),
+('intermediate',	'ensemble',	1,	30,	28,	1,	'0',	1),
+('intermediate',	'ensemble',	2,	31,	34,	2,	'0',	2),
+('intermediate',	'ensemble',	3,	32,	25,	3,	'0',	3),
+('intermediate',	'ensemble',	4,	33,	24,	4,	'0',	4),
+('intermediate',	'ensemble',	5,	34,	31,	5,	'0',	5);
+
+
+
+DROP TABLE IF EXISTS "payment";
+
+DROP SEQUENCE IF EXISTS payment_person_id_seq;
+CREATE SEQUENCE payment_person_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+
+CREATE TABLE "public"."payment" (
+    "id_payment" integer DEFAULT nextval('payment_id_payment_seq') NOT NULL,
+    "person_id" integer DEFAULT nextval('payment_person_id_seq') NOT NULL,
+    "total_price" smallint,
+    "total_rent" smallint,
+    "month" varchar(100),
+    CONSTRAINT "payment_pkey" PRIMARY KEY ("id_payment"),
+    CONSTRAINT "payment_person_id_fkey" FOREIGN KEY (person_id) REFERENCES student(person_id) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO payment(total_price,person_id,total_rent, month) VALUES 
+(495,1,100,'aug'),
+(270,1,100,'sep'),
+(180,1,100,'oct'),
+(180,1,100,'nov'),
+(135,1,100,'dec'),
+(0,1,100,'jan'),
+(405,2,100,'aug'),
+(360,2,100,'sep'),
+(360,2,100,'oct'),
+(180,2,100,'nov'),
+(135,2,100,'dec'),
+(0,2,100,'jan'),
+(450,3,110,'aug'),
+(400,3,110,'sep'),
+(300,3,110,'oct'),
+(300,3,110,'nov'),
+(350,3,110,'dec'),
+(0,3,100,'jan'),
+(800,4,0,'aug'),
+(700,4,120,'sep'),
+(400,4,120,'oct'),
+(0,4,120,'nov'),
+(150,4,120,'dec'),
+(0,4,120,'jan'),
+(600,5,0,'aug'),
+(1100,5,110,'sep'),
+(400,5,110,'oct'),
+(0,5,110,'nov'),
+(150,5,110,'dec'),
+(0,5,110,'jan'),
+(400,6,0,'aug'),
+(250,6,180,'sep'),
+(100,6,180,'oct'),
+(400,6,180,'nov'),
+(100,6,180,'dec'),
+(0,6,180,'jan'),
+(200,7,0,'aug'),
+(150,7,180,'sep'),
+(100,7,180,'oct'),
+(400,7,180,'nov'),
+(100,7,180,'dec'),
+(0,7,180,'jan'),
+(750,8,110,'aug'),
+(950,8,310,'sep'),
+(900,8,310,'oct'),
+(750,8,310,'nov'),
+(300,8,310,'dec'),
+(750,8,310,'jan'),
+(750,9,110,'aug'),
+(950,9,310,'sep'),
+(900,9,310,'oct'),
+(750,9,310,'nov'),
+(300,9,310,'dec'),
+(750,9,310,'jan'),
+(750,10,110,'aug'),
+(950,10,280,'sep'),
+(900,10,280,'oct'),
+(750,10,280,'nov'),
+(300,10,280,'dec'),
+(750,10,280,'jan'),
+(600,11,0,'aug'),
+(800,11,0,'sep'),
+(700,11,100,'oct'),
+(0,11,100,'nov'),
+(0,11,100,'dec'),
+(0,11,100,'jan'),
+(400,12,0,'aug'),
+(200,12,0,'sep'),
+(300,12,120,'oct'),
+(0,12,120,'nov'),
+(0,12,120,'dec'),
+(0,12,120,'jan'),
+(200,13,0,'aug'),
+(200,13,0,'sep'),
+(300,13,0,'oct'),
+(450,13,170,'nov'),
+(200,13,170,'dec'),
+(0,13,170,'jan'),
+(200,14,0,'aug'),
+(200,14,0,'sep'),
+(200,14,0,'oct'),
+(350,14,180,'nov'),
+(200,14,180,'dec'),
+(0,14,180,'jan');
+
+DROP TABLE IF EXISTS "month_salary";
+
+CREATE TABLE "public"."month_salary" (
+    "id_payment" integer,
+    "total_price_lesson" smallint,
+    "teacher_id" smallint
+) WITH (oids = false);
+
+INSERT INTO month_salary(id_payment, total_price_lesson,teacher_id) VALUES
+(1,495,12345),
+(2,270,12345), 
+(3,180,12345),
+(4,180,12345),
+(5,135,12444),
+(7,405,12345),
+(8,360,12345),
+(9,360,12345),
+(10,180,12444),
+(11,135,12345),
+(13,300,12345),
+(13,150,13425),
+(14,400,12345),
+(15,300,12345),
+(16,300,12345),
+(17,200,12345),
+(17,150,12444),
+(19,800,12345),
+(20,600,12435),
+(20,300,12234),
+(21,400,12435),
+(23,150,12444),
+(25,600,12435),
+(26,800,12435),
+(26,300,13425),
+(27,400,12435),
+(29,150,12444),
+(31,400,12345),
+(32,100,12345),
+(32,150,12435),
+(33,100,12345),
+(34,400,12345),
+(35,100,12345),
+(37,200,12345),
+(38,150,12435),
+(39,100,12345),
+(40,400,12345),
+(41,100,12345),
+(43,600,13425),
+(43,150,12444),
+(44,200,13334),
+(44,750,13425),
+(45,600,13425),
+(45,300,12444),
+(46,600,13425),
+(46,150,12444),
+(47,150,12444),
+(47,150,13425),
+(48,300,13425),
+(48,450,12444),
+(49,600,13425),
+(49,150,12444),
+(50,200,13334),
+(50,750,13425),
+(51,600,13425),
+(51,300,12444),
+(52,600,13425),
+(52,150,12444),
+(53,150,12444),
+(53,150,13425),
+(54,300,13425),
+(54,450,12444),
+(55,600,13425),
+(55,150,12444),
+(56,200,13334),
+(56,750,13425),
+(57,600,13425),
+(57,300,12444),
+(58,600,13425),
+(58,150,12444),
+(59,150,12444),
+(59,150,13425),
+(60,300,13425),
+(60,450,12444),
+(61,600,13435),
+(62,800,12345),
+(63,400,12435),
+(63,300,12345),
+(67,400,12435),
+(68,200,12435),
+(69,300,12435),
+(73,200,12345),
+(74,200,12345),
+(75,300,12345),
+(76,300,12345),
+(76,150,12244),
+(77,200,12345),
+(79,200,12345),
+(80,200,12345),
+(81,200,12345),
+(82,150,12435),
+(82,200,12345),
+(83,200,12345);
+
+
+DROP TABLE IF EXISTS "forms_applicants";
+DROP SEQUENCE IF EXISTS forms_applicants_id_application_seq;
+CREATE SEQUENCE forms_applicants_id_application_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."forms_applicants" (
+    "id_application" integer DEFAULT nextval('forms_applicants_id_application_seq') NOT NULL,
+    "application_time" DATE,
+    CONSTRAINT "forms_applicants_pkey" PRIMARY KEY ("id_application"),
+    CONSTRAINT "forms_applicants_id_application_fkey" FOREIGN KEY (id_application) REFERENCES application_form(id_application) NOT DEFERRABLE
+) WITH (oids = false);
+
+INSERT INTO forms_applicants(id_application,application_time) VALUES
+(1, '2020-08-11'),
+(2, '2020-08-11'),
+(3, '2020-08-11'),
+(4, '2020-08-05'),
+(5, '2020-08-06'),
+(6, '2020-09-01'),
+(7, '2020-08-06'),
+(8, '2020-09-08'),
+(9, '2020-08-11'),
+(10, '2020-09-20'),
+(11, '2020-08-11'),
+(12, '2020-09-23'),
+(13,'2020-08-12'),
+(14, '2020-08-12'),
+(15, '2020-08-06'),
+(16, '2020-08-12'),
+(17, '2020-08-06'),
+(18, '2020-09-29'),
+(19, '2020-09-30'),
+(20, '2020-08-12'),
+(21, '2020-08-06'),
+(22, '2020-10-13'),
+(23, '2020-08-06'),
+(24, '2020-10-14'),
+(25, '2020-08-27'),
+(26, '2020-08-17'),
+(27, '2020-09-30'),
+(28, '2020-11-03'),
+(29, '2020-08-17'),
+(30, '2020-12-05'),
+(31, '2020-12-05'),
+(32, '2020-12-05'),
+(33, '2020-12-05'),
+(34, '2020-12-05');
+
+
+DROP TABLE IF EXISTS "forms_registered_students";
+DROP SEQUENCE IF EXISTS forms_registered_students_id_application_seq;
+CREATE SEQUENCE forms_registered_students_id_application_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."forms_registered_students"(
+    "id_application" integer DEFAULT nextval('forms_registered_students_id_application_seq') NOT NULL,
+    "application_time" DATE,
+    CONSTRAINT "forms_registered_students_pkey" PRIMARY KEY ("id_application"),
+    CONSTRAINT "forms_registered_students_id_application_fkey" FOREIGN KEY (id_application) REFERENCES application_form(id_application) NOT DEFERRABLE
+) WITH (oids = false);
+
+
+INSERT INTO forms_registered_students(id_application,application_time) VALUES
+(1, '2020-08-11'),
+(2, '2020-08-11'),
+(3, '2020-08-11'),
+(4, '2020-08-05'),
+(5, '2020-08-06'),
+(6, '2020-09-01'),
+(7, '2020-08-06'),
+(8, '2020-09-08'),
+(9, '2020-08-11'),
+(10, '2020-09-20'),
+(11, '2020-08-11'),
+(12, '2020-09-23'),
+(13, '2020-08-12'),
+(14, '2020-08-12'),
+(15, '2020-08-06'),
+(16, '2020-08-12'),
+(17, '2020-08-06'),
+(18, '2020-09-29'),
+(19, '2020-09-30'),
+(20, '2020-08-12'),
+(21, '2020-08-06'),
+(22, '2020-10-13'),
+(23, '2020-08-06'),
+(24, '2020-10-14'),
+(25, '2020-08-27'),
+(26, '2020-08-17'),
+(27, '2020-09-30'),
+(28, '2020-11-03'),
+(29, '2020-08-17'),
+(30, '2020-12-05'),
+(31, '2020-12-05'),
+(32, '2020-12-05'),
+(33, '2020-12-05'),
+(34, '2020-12-05');
+
+CREATE VIEW CHECK_STAFF_STATUS AS
+SELECT "TeacherID","FirstName", "LastName", "Number of lessons" FROM
+(
+SELECT m1.teacher_id as "TeacherID",first_name as "FirstName", last_name as "LastName", count(distinct id_music_lesson) as "Number of lessons" FROM music_lesson as m1
+INNER JOIN teacher ON teacher.teacher_id = m1.teacher_id
+INNER JOIN person ON teacher.person_id = person.id
+INNER JOIN scheduled_hour_group ON scheduled_hour_group.id_group = m1.id_music_lesson
+WHERE date_part('month', (SELECT scheduled_hour_group.date)) = date_part('month', (SELECT CURRENT_TIMESTAMP))
+GROUP BY "TeacherID", "FirstName", "LastName" HAVING count(DISTINCT id_music_lesson) >=2
+UNION ALL
+SELECT m2.teacher_id as "TeacherID",first_name as "FirstName", last_name as "LastName",  count(distinct id_music_lesson) as "Number of lessons" FROM  music_lesson as m2
+INNER JOIN teacher ON teacher.teacher_id = m2.teacher_id
+INNER JOIN person ON teacher.person_id = person.id
+INNER JOIN scheduled_hour_ensemble ON scheduled_hour_ensemble.id_ensemble = m2.id_music_lesson
+WHERE date_part('month', (SELECT scheduled_hour_ensemble.date)) = date_part('month', (SELECT CURRENT_TIMESTAMP))
+GROUP BY "TeacherID","FirstName", "LastName" HAVING count(DISTINCT id_music_lesson) >=2
+UNION ALL
+SELECT m3.teacher_id as "TeacherID",first_name as "FirstName", last_name as "LastName", count(distinct id_music_lesson) as "Number of lessons" FROM music_lesson as m3
+INNER JOIN teacher ON teacher.teacher_id = m3.teacher_id
+INNER JOIN person ON teacher.person_id = person.id
+INNER JOIN appointment ON appointment.id_individual_lesson = m3.id_music_lesson
+WHERE date_part('month', (SELECT appointment.date)) = date_part('month', (SELECT CURRENT_TIMESTAMP))
+GROUP BY "TeacherID","FirstName", "LastName" HAVING count(DISTINCT id_music_lesson) >=2
+)AS dates
+GROUP BY "TeacherID","FirstName", "LastName","Number of lessons" ORDER BY "Number of lessons" asc;
