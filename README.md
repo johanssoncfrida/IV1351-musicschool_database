@@ -14,5 +14,6 @@ CREATE DATABASE musicschool
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 ```
-Execute commands in the SQL file in this repo. 
-If desired a text file with the same info as the SQL file but with data as well exists. 
+This database is created with PostgresSQL.\n
+Execute commands in the SQL file in this repo.\n
+If desired a text file with the same info as the SQL file but with data as well exists.\n 
