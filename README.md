@@ -1,4 +1,4 @@
-# musicschool_database
+# musicschool_database (Database for repository IV1351 - Musicschool)
 
 ## Setup
 
